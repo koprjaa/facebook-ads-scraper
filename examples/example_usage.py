@@ -34,7 +34,7 @@ def main():
     
     try:
         # Run the scraper
-        scraper.run(output_file="example_ads.json")
+        scraper.run(output_file="example-ads.json")
         print("Scraping completed successfully!")
         
         # You can also use individual methods

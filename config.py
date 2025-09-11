@@ -12,7 +12,7 @@ class Config:
         self.access_token: Optional[str] = os.getenv('FACEBOOK_ACCESS_TOKEN')
         self.ad_account_id: str = os.getenv('FACEBOOK_AD_ACCOUNT_ID', 'act_8204315166350573')
         self.limit: int = int(os.getenv('FACEBOOK_ADS_LIMIT', '100'))
-        self.output_file: str = os.getenv('FACEBOOK_ADS_OUTPUT_FILE', 'processed_ads.json')
+        self.output_file: str = os.getenv('FACEBOOK_ADS_OUTPUT_FILE', 'processed-ads.json')
         self.log_level: str = os.getenv('FACEBOOK_ADS_LOG_LEVEL', 'INFO')
         self.timeout: int = int(os.getenv('FACEBOOK_ADS_TIMEOUT', '30'))
     

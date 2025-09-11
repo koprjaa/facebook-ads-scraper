@@ -23,7 +23,7 @@ pip install -r requirements.txt
 export FACEBOOK_ACCESS_TOKEN="your_access_token_here"
 export FACEBOOK_AD_ACCOUNT_ID="act_8204315166350573"
 export FACEBOOK_ADS_LIMIT="100"
-export FACEBOOK_ADS_OUTPUT_FILE="processed_ads.json"
+export FACEBOOK_ADS_OUTPUT_FILE="processed-ads.json"
 export FACEBOOK_ADS_LOG_LEVEL="INFO"
 export FACEBOOK_ADS_TIMEOUT="30"
 ```
@@ -32,7 +32,7 @@ export FACEBOOK_ADS_TIMEOUT="30"
 
 Run the scraper:
 ```bash
-python fb_ad_lib_scraper.py
+python fb-ad-lib-scraper.py
 ```
 
 ## Configuration
@@ -49,8 +49,8 @@ The scraper uses the following environment variables:
 ## Output
 
 The scraper generates:
-- `processed_ads.json`: Structured ad data
-- `facebook_ads_scraper.log`: Application logs
+- `processed-ads.json`: Structured ad data
+- `facebook-ads-scraper.log`: Application logs
 
 ## Data Structure
 
