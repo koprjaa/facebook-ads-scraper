@@ -10,7 +10,7 @@ class Config:
     def __init__(self):
         """Initialize configuration from environment variables."""
         self.access_token: Optional[str] = os.getenv('FACEBOOK_ACCESS_TOKEN')
-        self.ad_account_id: str = os.getenv('FACEBOOK_AD_ACCOUNT_ID', 'act_8204315166350573')
+        self.ad_account_id: str = os.getenv('FACEBOOK_AD_ACCOUNT_ID', '')
         self.limit: int = int(os.getenv('FACEBOOK_ADS_LIMIT', '100'))
         self.output_file: str = os.getenv('FACEBOOK_ADS_OUTPUT_FILE', 'processed-ads.json')
         self.log_level: str = os.getenv('FACEBOOK_ADS_LOG_LEVEL', 'INFO')
@@ -25,12 +25,15 @@ class Config:
         """
         if not self.access_token:
             raise ValueError("FACEBOOK_ACCESS_TOKEN environment variable is required")
-        
-        if self.limit <= 0:
-            raise ValueError("FACEBOOK_ADS_LIMIT must be a positive integer")
-        
-        if self.timeout <= 0:
-            raise ValueError("FACEBOOK_ADS_TIMEOUT must be a positive integer")
-        
+
+        if not self.ad_account_id:
+            raise ValueError("FACEBOOK_AD_ACCOUNT_ID environment variable is required")
+
         if not self.ad_account_id.startswith('act_'):
             raise ValueError("FACEBOOK_AD_ACCOUNT_ID must start with 'act_'")
+
+        if self.limit <= 0:
+            raise ValueError("FACEBOOK_ADS_LIMIT must be a positive integer")
+
+        if self.timeout <= 0:
+            raise ValueError("FACEBOOK_ADS_TIMEOUT must be a positive integer")
