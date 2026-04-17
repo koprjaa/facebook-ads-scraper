@@ -1,65 +1,36 @@
 #!/usr/bin/env python3
-"""Example usage of the Facebook Ads scraper."""
+"""Programmatic usage of the Facebook Ads scraper as a library."""
 
-import os
-import sys
-from pathlib import Path
-
-# Add parent directory to path to import the scraper
-sys.path.append(str(Path(__file__).parent.parent))
-
-from fb_ad_lib_scraper import FacebookAdsScraper
-from config import Config
+from facebook_ads_scraper import AdData, FacebookAdsClient, FacebookAdsError, Settings
 
 
-def main():
-    """Example of how to use the Facebook Ads scraper programmatically."""
-    
-    # Load configuration
-    config = Config()
-    
+def main() -> int:
+    settings = Settings.from_env()
     try:
-        config.validate()
+        settings.validate()
     except ValueError as e:
         print(f"Configuration error: {e}")
-        print("Please set the required environment variables.")
-        return
-    
-    # Initialize scraper
-    scraper = FacebookAdsScraper(
-        access_token=config.access_token,
-        ad_account_id=config.ad_account_id,
-        limit=config.limit
-    )
-    
+        print("Set FACEBOOK_ACCESS_TOKEN and FACEBOOK_AD_ACCOUNT_ID environment variables.")
+        return 2
+
+    client = FacebookAdsClient(settings)
     try:
-        # Run the scraper
-        scraper.run(output_file="example-ads.json")
-        print("Scraping completed successfully!")
-        
-        # You can also use individual methods
-        print("\n--- Individual method usage ---")
-        
-        # Fetch ads
-        ads_data = scraper.fetch_ads()
-        print(f"Fetched {len(ads_data)} ads from API")
-        
-        # Process ads
-        processed_ads = scraper.process_ads(ads_data)
-        print(f"Processed {len(processed_ads)} ads")
-        
-        # Access individual ad data
-        if processed_ads:
-            first_ad = processed_ads[0]
-            print(f"\nFirst ad example:")
-            print(f"  ID: {first_ad.ad_id}")
-            print(f"  Name: {first_ad.ad_name}")
-            print(f"  Campaign: {first_ad.campaign_name}")
-            print(f"  Ad Set: {first_ad.adset_name}")
-        
-    except Exception as e:
-        print(f"Error: {e}")
+        # Stream ads as they arrive — useful for large accounts
+        print("Streaming ads (first 5):")
+        for i, raw in enumerate(client.iter_ads(limit=5)):
+            ad = AdData.from_api(raw)
+            print(f"  [{i + 1}] {ad.ad_name}  /  {ad.campaign_name}  /  {ad.adset_name}")
+
+        # Or fetch everything
+        print("\nFetching all ads (no limit)...")
+        all_raw = client.fetch_all()
+        print(f"Total: {len(all_raw)}")
+
+    except FacebookAdsError as e:
+        print(f"API error: {e}")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
